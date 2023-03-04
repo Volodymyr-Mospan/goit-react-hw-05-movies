@@ -1,25 +1,27 @@
 import { Header } from 'components/Header/Header';
 import { GlobalStyle } from 'components/GlobalStyle';
 import { HomePage } from 'components/HomePage/HomePage';
-import { fetchApi } from 'services/api';
-import { useEffect, useState } from 'react';
+import { Movies } from 'components/Movies/Movies';
+import { MovieDetails } from 'components/MovieDetails/MovieDetails';
+
+import { useState } from 'react';
 
 export const App = () => {
   // const [query, setQuery] = useState('');
-  const [data, setData] = useState([
-    { id: 1, name: 'qwerty' },
-    { id: 2, name: 'asdfg' },
-  ]);
-  const [path, setPath] = useState('/');
 
-  useEffect(() => {
-    fetchApi().then(result => setData(result));
-  }, [path]);
+  const [path, setPath] = useState('/');
+  // console.log(path);
+
+  const navigate = id => setPath(`movie/${id}`);
 
   return (
     <div>
       <Header />
-      <HomePage data={data} />
+      <Movies />
+      <HomePage onClick={navigate} />
+
+      {path !== '/' && <MovieDetails movieId={path} />}
+
       <GlobalStyle />
     </div>
   );

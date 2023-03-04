@@ -1,12 +1,30 @@
 import { Container } from 'components/GlobalStyle';
-export const HomePage = ({ data }) => {
+import { FetchApi } from 'services/api';
+import { useEffect, useState } from 'react';
+
+const api = new FetchApi();
+
+export const HomePage = ({ onClick }) => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    api.getTrending().then(result => setData(result));
+  }, []);
+
   return (
     <Container>
       <h1>Trending today</h1>
       <ul>
-        {data.map(el => {
-          return <li key={el.id}>{el.title ?? el.name}</li>;
-        })}
+        {!!data &&
+          data.map(el => {
+            return (
+              <li key={el.id}>
+                <button type="button" onClick={() => onClick(el.id)}>
+                  {el.title ?? el.name}
+                </button>
+              </li>
+            );
+          })}
       </ul>
     </Container>
   );

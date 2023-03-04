@@ -7,15 +7,45 @@ const params = {
   api_key: API_KEY,
 };
 
-export async function fetchApi() {
-  try {
-    const response = await axios.get('trending/all/day', {
-      params,
-    });
-    // console.log(response.data.results);
+// export async function fetchApi() {
+//   try {
+//     const response = await axios.get('trending/all/day', {
+//       params,
+//     });
+//     // console.log(response.data.results);
 
-    return response.data.results;
-  } catch (error) {
-    console.error(error);
+//     return response.data.results;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+export class FetchApi {
+  async getTrending() {
+    try {
+      const response = await axios.get('trending/all/day', {
+        params,
+      });
+      // console.log(response.data.results);
+
+      return response.data.results;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getMovieDetails(movieId) {
+    console.log(typeof movieId);
+
+    try {
+      const response = await axios.get(movieId, {
+        params,
+      });
+      console.log(response.data);
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
