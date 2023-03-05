@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const HeaderStld = styled.header`
-  padding-top: 25px;
-  padding-bottom: 25px;
+  /* padding-top: 25px; */
+  /* padding-bottom: 25px; */
 
   outline: 1px solid red;
 

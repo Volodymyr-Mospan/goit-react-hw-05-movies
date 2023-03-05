@@ -38,7 +38,7 @@ export class FetchApi {
     console.log(typeof movieId);
 
     try {
-      const response = await axios.get(movieId, {
+      const response = await axios.get(`movie/${movieId}`, {
         params,
       });
       console.log(response.data);

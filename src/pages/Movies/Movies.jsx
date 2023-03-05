@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Container } from 'components/GlobalStyle';
 
 export const Movies = () => {
   const [query, setQuery] = useState('');
@@ -9,9 +10,11 @@ export const Movies = () => {
   };
 
   return (
-    <form>
-      <input type="text" value={query} onChange={heandleChange} />
-      <button>Search</button>
-    </form>
+    <Container>
+      <form>
+        <input type="text" value={query} onChange={heandleChange} />
+        <button>Search</button>
+      </form>
+    </Container>
   );
 };

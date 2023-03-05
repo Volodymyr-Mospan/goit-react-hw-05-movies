@@ -13,6 +13,7 @@ export const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
 
-  padding-left: 45px;
-  padding-right: 45px;
+  padding: 25px 45px;
+  /* padding-left: 45px;
+  padding-right: 45px; */
 `;
