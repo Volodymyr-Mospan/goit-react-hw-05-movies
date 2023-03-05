@@ -6,18 +6,18 @@ import { FetchApi } from 'services/api';
 const api = new FetchApi();
 
 export const HomePage = ({ onClick }) => {
-  const [data, setData] = useState(null);
+  const [trending, setTrending] = useState(null);
 
   useEffect(() => {
-    api.getTrending().then(result => setData(result));
+    api.getTrending().then(result => setTrending(result));
   }, []);
 
   return (
     <Container>
       <h1>Trending today</h1>
       <ul>
-        {!!data &&
-          data.map(el => {
+        {!!trending &&
+          trending.map(el => {
             return (
               <li key={el.id}>
                 <NavLink to={`/movies/${el.id}`}>{el.title ?? el.name}</NavLink>
