@@ -13,6 +13,7 @@ export const Movies = () => {
   useEffect(() => {
     if (!query) return;
     api.getMovie(query).then(result => setMovies(result));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const heandleChange = e => {
