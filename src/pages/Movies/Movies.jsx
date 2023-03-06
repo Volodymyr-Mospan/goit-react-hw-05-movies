@@ -1,13 +1,19 @@
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import { Container } from 'components/GlobalStyle';
 import { FetchApi } from 'services/api';
 
 const api = new FetchApi();
 
 export const Movies = () => {
-  const [query, setQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get('query') ?? '');
   const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    if (!query) return;
+    api.getMovie(query).then(result => setMovies(result));
+  }, []);
 
   const heandleChange = e => {
     setQuery(e.currentTarget.value);
@@ -15,6 +21,9 @@ export const Movies = () => {
 
   const heandlSubmit = e => {
     e.preventDefault();
+    const nextParams = query !== '' ? { query } : {};
+
+    setSearchParams(nextParams);
     api.getMovie(query).then(result => setMovies(result));
   };
 
