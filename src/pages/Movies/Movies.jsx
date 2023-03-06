@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import { Container } from 'components/GlobalStyle';
 import { FetchApi } from 'services/api';
@@ -10,10 +10,11 @@ export const Movies = () => {
   const [query, setQuery] = useState(() => searchParams.get('query') ?? '');
   const [movies, setMovies] = useState([]);
 
+  const firstQuery = useRef(query);
+
   useEffect(() => {
-    if (!query) return;
-    api.getMovie(query).then(result => setMovies(result));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!firstQuery.current) return;
+    api.getMovie(firstQuery.current).then(result => setMovies(result));
   }, []);
 
   const heandleChange = e => {
