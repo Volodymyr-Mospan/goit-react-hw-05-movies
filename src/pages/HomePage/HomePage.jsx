@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Container } from 'components/GlobalStyle';
 import { FetchApi } from 'services/api';
@@ -7,6 +7,7 @@ const api = new FetchApi();
 
 export const HomePage = ({ onClick }) => {
   const [trending, setTrending] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     api.getTrending().then(result => setTrending(result));
@@ -20,7 +21,9 @@ export const HomePage = ({ onClick }) => {
           trending.map(el => {
             return (
               <li key={el.id}>
-                <NavLink to={`/movies/${el.id}`}>{el.title ?? el.name}</NavLink>
+                <NavLink to={`/movies/${el.id}`} state={{ from: location }}>
+                  {el.title ?? el.name}
+                </NavLink>
               </li>
             );
           })}
