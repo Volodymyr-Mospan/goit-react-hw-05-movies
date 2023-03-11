@@ -1,5 +1,4 @@
-import { NavLink } from 'react-router-dom';
-import { HeaderStld, ListStld } from 'components/Header/Header.styled';
+import { HeaderStld, ListStld, Link } from 'components/Header/Header.styled';
 import { Container } from 'components/GlobalStyle';
 
 export const Header = () => {
@@ -9,12 +8,12 @@ export const Header = () => {
         <nav>
           <ListStld>
             <li>
-              <NavLink to="/" end>
+              <Link to="/" end>
                 Home
-              </NavLink>
+              </Link>
             </li>
             <li>
-              <NavLink to="/movies">Movies</NavLink>
+              <Link to="/movies">Movies</Link>
             </li>
           </ListStld>
         </nav>

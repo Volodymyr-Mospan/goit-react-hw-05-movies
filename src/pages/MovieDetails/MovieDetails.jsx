@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, Link, Outlet, useLocation } from 'react-router-dom';
+import {
+  useParams,
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { Container } from 'components/GlobalStyle';
 import { Section, FlexComponent } from 'pages/MovieDetails/MovieDetails.styled';
 
@@ -11,12 +17,19 @@ export const MovieDetails = () => {
   const { movieId } = useParams();
   const [film, setFilm] = useState(null);
 
+  const navigate = useNavigate();
   const location = useRef(useLocation());
   const backLinkHref = location.current.state?.from ?? '/movies';
 
   useEffect(() => {
-    api.getMovieDetails(movieId).then(result => setFilm(result));
-  }, [movieId]);
+    api
+      .getMovieDetails(`movie/${movieId}`)
+      .then(result => setFilm(result))
+      .catch(error => {
+        console.error(error);
+        navigate('/noFound', { replace: true });
+      });
+  }, [movieId, navigate]);
 
   if (film) {
     return (

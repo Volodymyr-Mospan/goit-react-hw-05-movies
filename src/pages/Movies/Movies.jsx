@@ -11,13 +11,15 @@ export const Movies = () => {
   const [movies, setMovies] = useState(null);
 
   const location = useLocation();
-  console.log(location);
   const firstQuery = useRef(query);
 
   useEffect(() => {
-    if (!firstQuery.current) return;
-    api.getMovie(firstQuery.current).then(result => setMovies(result));
-  }, []);
+    const qeury = searchParams.get('query');
+    if (!qeury) return;
+
+    setQuery(qeury);
+    api.getMovie(qeury).then(result => setMovies(result));
+  }, [searchParams]);
 
   const heandleChange = e => {
     setQuery(e.currentTarget.value);
@@ -28,7 +30,7 @@ export const Movies = () => {
     const nextParams = query !== '' ? { query } : {};
 
     setSearchParams(nextParams);
-    api.getMovie(query).then(result => setMovies(result));
+    // api.getMovie(query).then(result => setMovies(result));
   };
 
   return (

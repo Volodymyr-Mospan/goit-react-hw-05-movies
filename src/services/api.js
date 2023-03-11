@@ -1,4 +1,5 @@
 import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
 
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
@@ -35,39 +36,11 @@ export class FetchApi {
     }
   }
 
-  async getMovieDetails(movieId) {
-    try {
-      const response = await axios.get(`movie/${movieId}`, {
-        params,
-      });
+  async getMovieDetails(movieDetails) {
+    const response = await axios.get(movieDetails, {
+      params,
+    });
 
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async getMovieCast(movieId) {
-    try {
-      const response = await axios.get(`movie/${movieId}/credits`, {
-        params,
-      });
-
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async getMovieReviews(movieId) {
-    try {
-      const response = await axios.get(`movie/${movieId}/reviews`, {
-        params,
-      });
-
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
+    return response.data;
   }
 }

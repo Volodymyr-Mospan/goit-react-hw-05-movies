@@ -1,5 +1,5 @@
 import { FetchApi } from 'services/api';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const api = new FetchApi();
@@ -7,10 +7,17 @@ const api = new FetchApi();
 export const Reviews = () => {
   const { movieId } = useParams();
   const [filmReviews, setFilmReviews] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    api.getMovieReviews(movieId).then(result => setFilmReviews(result));
-  }, [movieId]);
+    api
+      .getMovieDetails(`movie/${movieId}/reviews`)
+      .then(result => setFilmReviews(result))
+      .catch(error => {
+        console.error(error);
+        navigate('/noFound', { replace: true });
+      });
+  }, [movieId, navigate]);
 
   return (
     <>
