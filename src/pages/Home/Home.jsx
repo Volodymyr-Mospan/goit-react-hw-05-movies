@@ -1,16 +1,20 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Container } from 'components/GlobalStyle';
 import { FetchApi } from 'services/api';
-
+import { Container } from 'components/GlobalStyle';
+import { FilmListItem } from 'pages/Home/Home.styled';
 const api = new FetchApi();
 
-export const Home = ({ onClick }) => {
+export const Home = () => {
   const [trending, setTrending] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
-    api.getTrending().then(result => setTrending(result));
+    const abortController = new AbortController();
+    api.getTrending(abortController).then(result => setTrending(result));
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (
@@ -20,32 +24,14 @@ export const Home = ({ onClick }) => {
         {!!trending &&
           trending.map(el => {
             return (
-              <li key={el.id}>
+              <FilmListItem key={el.id}>
                 <NavLink to={`/movies/${el.id}`} state={{ from: location }}>
                   {el.title ?? el.name}
                 </NavLink>
-              </li>
+              </FilmListItem>
             );
           })}
       </ul>
     </Container>
   );
-
-  // return (
-  //   <Container>
-  //     <h1>Trending today</h1>
-  //     <ul>
-  //       {!!data &&
-  //         data.map(el => {
-  //           return (
-  //             <li key={el.id}>
-  //               <button type="button" onClick={() => onClick(el.id)}>
-  //                 {el.title ?? el.name}
-  //               </button>
-  //             </li>
-  //           );
-  //         })}
-  //     </ul>
-  //   </Container>
-  // );
 };

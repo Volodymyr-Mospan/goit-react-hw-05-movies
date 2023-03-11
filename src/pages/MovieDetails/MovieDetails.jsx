@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  useParams,
-  Link,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useParams, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Container } from 'components/GlobalStyle';
-import { Section, FlexComponent } from 'pages/MovieDetails/MovieDetails.styled';
+import {
+  Section,
+  FlexComponent,
+  Link,
+} from 'pages/MovieDetails/MovieDetails.styled';
 
 import { FetchApi } from 'services/api';
 
@@ -22,13 +20,26 @@ export const MovieDetails = () => {
   const backLinkHref = location.current.state?.from ?? '/movies';
 
   useEffect(() => {
-    api
-      .getMovieDetails(`movie/${movieId}`)
-      .then(result => setFilm(result))
-      .catch(error => {
+    const abortController = new AbortController();
+
+    async function fetchMovieDetails() {
+      try {
+        const result = await api.getMovieDetails(
+          `movie/${movieId}`,
+          abortController
+        );
+        setFilm(result);
+      } catch (error) {
+        if (error.code === 'ERR_CANCELED') return;
         console.error(error);
         navigate('/noFound', { replace: true });
-      });
+      }
+    }
+    fetchMovieDetails();
+
+    return () => {
+      abortController.abort();
+    };
   }, [movieId, navigate]);
 
   if (film) {
@@ -36,7 +47,7 @@ export const MovieDetails = () => {
       <Container>
         <Section>
           <FlexComponent>
-            <Link to={backLinkHref}>return</Link>
+            <Link to={backLinkHref}>&larr; return</Link>
             <img
               src={`https://image.tmdb.org/t/p/w500${film.poster_path}`}
               alt={`Poster of ${film.title ?? film.name}`}
@@ -46,8 +57,9 @@ export const MovieDetails = () => {
 
           <FlexComponent>
             <h2>
-              {film.title ?? film.name} (
-              {Number.parseInt(film.release_date) || 'no date'})
+              {film.title ?? film.name}
+              {!!film.release_date &&
+                ` (${Number.parseInt(film.release_date)})`}
             </h2>
             <p>User Score: {Math.floor(film.vote_average * 10)}%</p>
 
@@ -57,7 +69,7 @@ export const MovieDetails = () => {
                 <p>{film.overview}</p>
               </div>
             )}
-            {film.genres.length && (
+            {!!film.genres.length && (
               <div>
                 <h3>Genres</h3>
                 {film.genres.map(genre => (

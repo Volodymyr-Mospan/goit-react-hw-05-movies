@@ -9,21 +9,24 @@ const params = {
 };
 
 export class FetchApi {
-  async getTrending() {
+  async getTrending(abortController) {
     try {
-      const response = await axios.get('trending/all/day', {
+      const response = await axios.get('trending/movie/day', {
+        signal: abortController.signal,
         params,
       });
 
       return response.data.results;
     } catch (error) {
+      if (error.code === 'ERR_CANCELED') return;
       console.error(error);
     }
   }
 
-  async getMovie(query) {
+  async getMovie(query, abortController) {
     try {
       const response = await axios.get('search/movie', {
+        signal: abortController.signal,
         params: {
           ...params,
           query,
@@ -32,12 +35,14 @@ export class FetchApi {
 
       return response.data.results;
     } catch (error) {
+      if (error.code === 'ERR_CANCELED') return;
       console.error(error);
     }
   }
 
-  async getMovieDetails(movieDetails) {
+  async getMovieDetails(movieDetails, abortController) {
     const response = await axios.get(movieDetails, {
+      signal: abortController.signal,
       params,
     });
 

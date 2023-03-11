@@ -10,13 +10,25 @@ export const Reviews = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api
-      .getMovieDetails(`movie/${movieId}/reviews`)
-      .then(result => setFilmReviews(result))
-      .catch(error => {
+    const abortController = new AbortController();
+
+    async function fetchMovieDetails() {
+      try {
+        const result = await api.getMovieDetails(
+          `movie/${movieId}/reviews`,
+          abortController
+        );
+        setFilmReviews(result);
+      } catch (error) {
+        if (error.code === 'ERR_CANCELED') return;
         console.error(error);
-        navigate('/noFound', { replace: true });
-      });
+      }
+    }
+    fetchMovieDetails();
+
+    return () => {
+      abortController.abort();
+    };
   }, [movieId, navigate]);
 
   return (

@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useSearchParams } from 'react-router-dom';
-import { Container } from 'components/GlobalStyle';
 import { FetchApi } from 'services/api';
+import { Container } from 'components/GlobalStyle';
+import { FilmListItem } from 'pages/Movies/Movies.styled';
 
 const api = new FetchApi();
 
@@ -11,14 +12,18 @@ export const Movies = () => {
   const [movies, setMovies] = useState(null);
 
   const location = useLocation();
-  const firstQuery = useRef(query);
 
   useEffect(() => {
     const qeury = searchParams.get('query');
+    const abortController = new AbortController();
     if (!qeury) return;
 
     setQuery(qeury);
-    api.getMovie(qeury).then(result => setMovies(result));
+    api.getMovie(qeury, abortController).then(result => setMovies(result));
+
+    return () => {
+      abortController.abort();
+    };
   }, [searchParams]);
 
   const heandleChange = e => {
@@ -30,7 +35,6 @@ export const Movies = () => {
     const nextParams = query !== '' ? { query } : {};
 
     setSearchParams(nextParams);
-    // api.getMovie(query).then(result => setMovies(result));
   };
 
   return (
@@ -44,12 +48,12 @@ export const Movies = () => {
         <ul>
           {movies.map(movie => {
             return (
-              <li key={movie.id}>
+              <FilmListItem key={movie.id}>
                 <NavLink to={`/movies/${movie.id}`} state={{ from: location }}>
                   {movie.title ?? movie.name} (
                   {Number.parseInt(movie.release_date) || 'no date'})
                 </NavLink>
-              </li>
+              </FilmListItem>
             );
           })}
         </ul>
