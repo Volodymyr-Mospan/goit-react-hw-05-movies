@@ -15,14 +15,18 @@ const Home = () => {
   useEffect(() => {
     const abortController = new AbortController();
     setIsLoading(true);
-    api
-      .getTrending(abortController)
-      .then(result => setTrending(result))
-      .then(() => setIsLoading(false))
-      .catch(error => {
+    async function fetchMovieDetails() {
+      try {
+        const result = await api.getTrending(abortController);
+        setTrending(result);
+        setIsLoading(false);
+      } catch (error) {
         if (error.code === 'ERR_CANCELED') return;
         console.error(error);
-      });
+      }
+    }
+    fetchMovieDetails();
+
     return () => {
       abortController.abort();
     };

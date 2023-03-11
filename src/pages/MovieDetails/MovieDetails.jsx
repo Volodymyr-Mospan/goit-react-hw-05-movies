@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import { useParams, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Container } from 'components/GlobalStyle';
 import {
@@ -6,6 +6,7 @@ import {
   FlexComponent,
   Link,
 } from 'pages/MovieDetails/MovieDetails.styled';
+import { Loader } from 'components/Loader/Loader';
 
 import { FetchApi } from 'services/api';
 
@@ -91,7 +92,9 @@ const MovieDetails = () => {
           </ul>
         </section>
         <section>
-          <Outlet></Outlet>
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
         </section>
       </Container>
     );
