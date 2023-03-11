@@ -5,7 +5,7 @@ import { FetchApi } from 'services/api';
 
 const api = new FetchApi();
 
-export const HomePage = ({ onClick }) => {
+export const Home = ({ onClick }) => {
   const [trending, setTrending] = useState(null);
   const location = useLocation();
 
