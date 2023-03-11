@@ -5,7 +5,7 @@ import { Person } from 'components/Cast/Cast.styled';
 
 const api = new FetchApi();
 
-export const Cast = () => {
+const Cast = () => {
   const { movieId } = useParams();
   const [filmCast, setFilmCast] = useState(null);
   const navigate = useNavigate();
@@ -54,3 +54,5 @@ export const Cast = () => {
     </>
   );
 };
+
+export default Cast;

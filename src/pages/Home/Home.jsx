@@ -3,15 +3,26 @@ import { useEffect, useState } from 'react';
 import { FetchApi } from 'services/api';
 import { Container } from 'components/GlobalStyle';
 import { FilmListItem } from 'pages/Home/Home.styled';
+import { Loader } from 'components/Loader/Loader';
+
 const api = new FetchApi();
 
-export const Home = () => {
+const Home = () => {
   const [trending, setTrending] = useState(null);
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const abortController = new AbortController();
-    api.getTrending(abortController).then(result => setTrending(result));
+    setIsLoading(true);
+    api
+      .getTrending(abortController)
+      .then(result => setTrending(result))
+      .then(() => setIsLoading(false))
+      .catch(error => {
+        if (error.code === 'ERR_CANCELED') return;
+        console.error(error);
+      });
     return () => {
       abortController.abort();
     };
@@ -20,6 +31,9 @@ export const Home = () => {
   return (
     <Container>
       <h1>Trending today</h1>
+
+      {isLoading && <Loader />}
+
       <ul>
         {!!trending &&
           trending.map(el => {
@@ -35,3 +49,5 @@ export const Home = () => {
     </Container>
   );
 };
+
+export default Home;

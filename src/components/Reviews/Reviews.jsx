@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 const api = new FetchApi();
 
-export const Reviews = () => {
+const Reviews = () => {
   const { movieId } = useParams();
   const [filmReviews, setFilmReviews] = useState(null);
   const navigate = useNavigate();
@@ -50,3 +50,5 @@ export const Reviews = () => {
     </>
   );
 };
+
+export default Reviews;

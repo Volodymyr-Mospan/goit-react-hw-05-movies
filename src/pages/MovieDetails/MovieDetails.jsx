@@ -11,7 +11,7 @@ import { FetchApi } from 'services/api';
 
 const api = new FetchApi();
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
   const { movieId } = useParams();
   const [film, setFilm] = useState(null);
 
@@ -97,3 +97,5 @@ export const MovieDetails = () => {
     );
   }
 };
+
+export default MovieDetails;

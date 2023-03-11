@@ -3,13 +3,15 @@ import { NavLink, useLocation, useSearchParams } from 'react-router-dom';
 import { FetchApi } from 'services/api';
 import { Container } from 'components/GlobalStyle';
 import { FilmListItem } from 'pages/Movies/Movies.styled';
+import { Loader } from 'components/Loader/Loader';
 
 const api = new FetchApi();
 
-export const Movies = () => {
+const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(() => searchParams.get('query') ?? '');
   const [movies, setMovies] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const location = useLocation();
 
@@ -19,7 +21,11 @@ export const Movies = () => {
     if (!qeury) return;
 
     setQuery(qeury);
-    api.getMovie(qeury, abortController).then(result => setMovies(result));
+    setIsLoading(true);
+    api
+      .getMovie(qeury, abortController)
+      .then(result => setMovies(result))
+      .then(() => setIsLoading(false));
 
     return () => {
       abortController.abort();
@@ -44,7 +50,9 @@ export const Movies = () => {
         <button>Search</button>
       </form>
 
-      {movies && (
+      {isLoading && <Loader />}
+
+      {!isLoading && movies && (
         <ul>
           {movies.map(movie => {
             return (
@@ -59,7 +67,9 @@ export const Movies = () => {
         </ul>
       )}
 
-      {(movies ? !movies.length : false) && <p>Nothing found</p>}
+      {!isLoading && (movies ? !movies.length : false) && <p>Nothing found</p>}
     </Container>
   );
 };
+
+export default Movies;
