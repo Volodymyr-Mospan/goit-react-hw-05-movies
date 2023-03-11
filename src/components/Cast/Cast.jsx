@@ -34,23 +34,24 @@ const Cast = () => {
 
   return (
     <>
-      {!!filmCast &&
-        filmCast?.cast.map(actor => (
-          <Person key={actor.id}>
-            {
-              <img
-                src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
-                alt={`${actor.name}`}
-                width="100"
-              />
-            }
+      {!!filmCast
+        ? filmCast?.cast.map(actor => (
+            <Person key={actor.id}>
+              {
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
+                  alt={`${actor.name}`}
+                  width="100"
+                />
+              }
 
-            <div>
-              <p>Name: {actor.name}</p>
-              <p>Character: {actor.character}</p>
-            </div>
-          </Person>
-        ))}
+              <div>
+                <p>Name: {actor.name}</p>
+                <p>Character: {actor.character}</p>
+              </div>
+            </Person>
+          ))
+        : "We don't have any cast for this movie"}
     </>
   );
 };
