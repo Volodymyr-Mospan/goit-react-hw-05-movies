@@ -34,7 +34,7 @@ const Cast = () => {
 
   return (
     <>
-      {!!filmCast
+      {!!filmCast?.cast?.length
         ? filmCast?.cast.map(actor => (
             <Person key={actor.id}>
               {
