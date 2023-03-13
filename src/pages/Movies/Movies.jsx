@@ -57,7 +57,7 @@ const Movies = () => {
           {movies.map(movie => {
             return (
               <FilmListItem key={movie.id}>
-                <NavLink to={`/movies/${movie.id}`} state={{ from: location }}>
+                <NavLink to={`${movie.id}`} state={{ from: location }}>
                   {movie.title ?? movie.name} (
                   {Number.parseInt(movie.release_date) || 'no date'})
                 </NavLink>
