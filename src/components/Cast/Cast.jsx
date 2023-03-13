@@ -2,16 +2,19 @@ import { FetchApi } from 'services/api';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Person } from 'components/Cast/Cast.styled';
+import { Loader } from 'components/Loader/Loader';
 
 const api = new FetchApi();
 
 const Cast = () => {
   const { movieId } = useParams();
   const [filmCast, setFilmCast] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const abortController = new AbortController();
+    setIsLoading(true);
 
     async function fetchMovieDetails() {
       try {
@@ -24,6 +27,7 @@ const Cast = () => {
         if (error.code === 'ERR_CANCELED') return;
         console.error(error);
       }
+      setIsLoading(false);
     }
     fetchMovieDetails();
 
@@ -51,7 +55,8 @@ const Cast = () => {
               </div>
             </Person>
           ))
-        : "We don't have any cast for this movie"}
+        : !isLoading && "We don't have any cast for this movie"}
+      {isLoading && <Loader />}
     </>
   );
 };
