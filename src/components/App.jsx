@@ -20,10 +20,6 @@ export const App = () => {
   return (
     <>
       <Routes>
-        <Route path="goit-react-hw-05-movies/" element={<SharedLayout />}>
-          <Route index element={<Home />} />
-        </Route>
-
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Home />} />
           <Route path="movies" element={<Movies />} />
